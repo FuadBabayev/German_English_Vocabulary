@@ -12,7 +12,7 @@ $(function () {
     }
 
     function fetchData() {
-        $.getJSON('data/vocabulary.json', function (jsonData) {
+        $.getJSON('data/randomVocabulary.json', function (jsonData) {
             dataEnglishGerman = jsonData.germanEnglish;
             dataGermanEnglish = Object.fromEntries(
                 Object.entries(dataEnglishGerman).map(([en, de]) => [de, en])
