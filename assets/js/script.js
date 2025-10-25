@@ -37,24 +37,29 @@ $(function () {
         setTimeout(() => {
             accordion.empty();
             const [mainWord, translation] = shuffledWords[currentIndex];
+            const collapseId = `collapseWord${currentIndex}`; // unique ID
 
             const item = $(`
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed  text-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWord">
-                <p>${mainWord}</p>
-          </button>
-        </h2>
-        <div id="collapseWord" class="accordion-collapse collapse">
-          <div class="accordion-body highlight text-center">
-            ${translation}
-          </div>
-        </div>
-      </div>
-    `);
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+                            <p>${mainWord}</p>
+                        </button>
+                    </h2>
+                    <div id="${collapseId}" class="accordion-collapse collapse">
+                        <div class="accordion-body highlight text-center">
+                            ${translation}
+                        </div>
+                    </div>
+                </div>
+            `);
 
             accordion.append(item).addClass("show");
-        }, 200);
+
+            // Initialize Bootstrap collapse for dynamically added element
+            const collapseEl = document.getElementById(collapseId);
+            new bootstrap.Collapse(collapseEl, { toggle: false });
+        }, 0);
     }
 
     $("#englishBtn").on("click", function () {
@@ -81,10 +86,39 @@ $(function () {
         }
     });
 
+    // Keyboard events for Next, Previous, and Toggle
+    $(document).on("keydown", function (e) {
+        if (e.ctrlKey && e.key.toLowerCase() === "e") {
+            e.preventDefault();
+            currentLang = "english";
+            loadData();
+        } else if (e.ctrlKey && e.key.toLowerCase() === "g") {
+            e.preventDefault();
+            currentLang = "german";
+            loadData();
+        }
+
+        if (e.code === "ArrowRight") {
+            if (currentIndex < shuffledWords.length - 1) {
+                currentIndex++;
+                renderAccordion();
+            }
+        } else if (e.code === "ArrowLeft") {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderAccordion();
+            }
+        } else if (e.code === "Space" || e.code === "Enter") {
+            e.preventDefault();
+            const collapseId = `collapseWord${currentIndex}`;
+            const collapseEl = document.getElementById(collapseId);
+            const bsCollapse = bootstrap.Collapse.getInstance(collapseEl) || new bootstrap.Collapse(collapseEl, { toggle: false });
+            bsCollapse.toggle();
+        }
+    });
+
     // Fetch data and initialize
     $(document).ready(function () {
         fetchData();
     });
-
-
 });
