@@ -6,7 +6,7 @@
 
 
 
-I will give you the words like that
+I will give you the words like that list all words in parentheses are included
 Herzlich Willkommen / Willkommen			Welcome     (Xoş gəlmişsiniz)
 Begrüßungen						Greetings     (salamlaşma)
 Begrüßen / Grüßen					To greet       (salamlaşmaq)
